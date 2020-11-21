@@ -361,10 +361,20 @@ public class RCTBluetoothSerialModule extends ReactContextBaseJavaModule impleme
      */
     public void writeToDevice(String message, Promise promise) {
         if (D) Log.d(TAG, "Write " + message);
-        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        // byte[] data = Base64.decode(message, Base64.DEFAULT);
+        byte[] data = strToHexByteArray(message);
         mBluetoothService.write(data);
         promise.resolve(true);
     }
+
+    /** 16进制字符串转换成16进制byte数组，每两位转换 */
+	public static byte[] strToHexByteArray(String str){
+		byte[] hexByte = new byte[str.length()/2];
+		for(int i = 0,j = 0; i < str.length(); i = i + 2,j++){
+			hexByte[j] = (byte)Integer.parseInt(str.substring(i,i+2), 16);
+		}
+		return hexByte;
+	}
 
     /**********************/
     /** Read from device **/
