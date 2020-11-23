@@ -225,26 +225,27 @@ class RCTBluetoothSerialService {
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
                 mModule.onError(e);
-
+                connectionFailed();
+                return;
                 // Some 4.1 devices have problems, try an alternative way to connect
                 // See https://github.com/don/RCTBluetoothSerialModule/issues/89
-                try {
-                    Log.i(TAG,"Trying fallback...");
-                    mmSocket = (BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
-                    mmSocket.connect();
-                    Log.i(TAG,"Connected");
-                } catch (Exception e2) {
-                    Log.e(TAG, "Couldn't establish a Bluetooth connection.");
-                    mModule.onError(e2);
-                    try {
-                        mmSocket.close();
-                    } catch (Exception e3) {
-                        Log.e(TAG, "unable to close() socket during connection failure", e3);
-                        mModule.onError(e3);
-                    }
-                    connectionFailed();
-                    return;
-                }
+                // try {
+                //     Log.i(TAG,"Trying fallback...");
+                //     mmSocket = (BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
+                //     mmSocket.connect();
+                //     Log.i(TAG,"Connected");
+                // } catch (Exception e2) {
+                //     Log.e(TAG, "Couldn't establish a Bluetooth connection.");
+                //     mModule.onError(e2);
+                //     try {
+                //         mmSocket.close();
+                //     } catch (Exception e3) {
+                //         Log.e(TAG, "unable to close() socket during connection failure", e3);
+                //         mModule.onError(e3);
+                //     }
+                //     connectionFailed();
+                //     return;
+                // }
             }
 
             // Reset the ConnectThread because we're done
