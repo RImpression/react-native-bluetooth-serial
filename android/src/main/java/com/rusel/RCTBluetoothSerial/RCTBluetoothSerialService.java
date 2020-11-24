@@ -201,7 +201,9 @@ class RCTBluetoothSerialService {
 
             // Get a BluetoothSocket for a connection with the given BluetoothDevice
             try {
-                tmp = device.createRfcommSocketToServiceRecord(UUID_SPP);
+//                tmp = device.createRfcommSocketToServiceRecord(UUID_SPP);
+                // 用上面创建socket短时间多次连接会抛IO异常
+                tmp = (BluetoothSocket)device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
             } catch (Exception e) {
                 mModule.onError(e);
                 Log.e(TAG, "Socket create() failed", e);
@@ -219,12 +221,13 @@ class RCTBluetoothSerialService {
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a successful connection or an exception
-                if (D) Log.d(TAG,"Connecting to socket...");
+                if (D) Log.d(TAG,"Connecting to socket..." + mmSocket.toString());
                 mmSocket.connect();
                 if (D) Log.d(TAG,"Connected");
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
                 mModule.onError(e);
+
                 connectionFailed();
                 return;
                 // Some 4.1 devices have problems, try an alternative way to connect

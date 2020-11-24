@@ -28,10 +28,10 @@ BluetoothSerial.removeListener = (eventName, handler) => {
  * @return {Promise<Boolean>}
  */
 BluetoothSerial.write = (data) => {
-  if (typeof data === 'string') {
-    data = new Buffer(data)
-  }
-  return BluetoothSerial.writeToDevice(data.toString('base64'))
+  // if (typeof data === 'string') {
+  //   data = new Buffer(data)
+  // }
+  return BluetoothSerial.writeToDevice(data)
 }
 
 module.exports = BluetoothSerial
